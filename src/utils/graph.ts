@@ -118,7 +118,7 @@ export function transformGraph({
     const to = map.get(link.target);
 
     if (from && to) {
-      const { data, id, label, size, ...rest } = link;
+      const { data, id, label, size, fill, ...rest } = link;
       const labelVisible = checkVisibility('edge', size);
 
       // TODO: Fix type
@@ -128,6 +128,7 @@ export function transformGraph({
         label,
         labelVisible,
         size,
+        fill,
         data: {
           ...rest,
           id,

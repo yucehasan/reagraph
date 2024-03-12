@@ -129,6 +129,8 @@ export const Edge: FC<EdgeProps> = ({
   const from = useStore(store => store.nodes.find(node => node.id === source));
   const to = useStore(store => store.nodes.find(node => node.id === target));
 
+  const color = edge.fill || theme.edge.fill;
+
   // Edge properties
   const labelOffset = (size + theme.edge.label.fontSize) / 2;
   const [arrowLength, arrowSize] = useMemo(() => getArrowSize(size), [size]);
@@ -359,11 +361,7 @@ export const Edge: FC<EdgeProps> = ({
       <Line
         curveOffset={curveOffset}
         animated={animated}
-        color={
-          isSelected || active || isActive
-            ? theme.edge.activeFill
-            : theme.edge.fill
-        }
+        color={color}
         curve={curve}
         curved={curved}
         id={id}

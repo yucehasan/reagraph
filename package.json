@@ -1,6 +1,6 @@
 {
-  "name": "reagraph",
-  "version": "4.15.21",
+  "name": "reagraph-yuce",
+  "version": "1.0.4",
   "description": "WebGL Node-based Graph for React",
   "scripts": {
     "build": "vite build --mode library",
@@ -31,7 +31,7 @@
   "typings": "dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/reaviz/reagraph.git"
+    "url": "git+https://github.com:yucehasan/reagraph.git"
   },
   "files": [
     "dist"
@@ -48,9 +48,9 @@
   ],
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/reaviz/reagraph/issues"
+    "url": "https://github.com:yucehasan/reagraph/issues"
   },
-  "homepage": "https://github.com/reaviz/reagraph#readme",
+  "homepage": "https://github.com:yucehasan/reagraph#readme",
   "dependencies": {
     "@react-spring/three": "9.6.1",
     "@react-three/fiber": "8.13.5",

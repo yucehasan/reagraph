@@ -52,14 +52,19 @@ export interface GraphNode extends GraphElementBaseAttributes {
 
 export interface GraphEdge extends GraphElementBaseAttributes {
   /**
-   * Source ID of the node.
+   * Source ID of the edge.
    */
   source: string;
 
   /**
-   * Target ID of the node.
+   * Target ID of the edge.
    */
   target: string;
+
+  /**
+   * Fill color for the edge.
+   */
+  fill?: string;
 }
 
 export interface Graph {
