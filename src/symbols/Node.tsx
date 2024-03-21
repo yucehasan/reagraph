@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React, {
   FC,
   ReactNode,
@@ -25,6 +26,7 @@ import { useStore } from '../store';
 import { useDrag } from '../utils/useDrag';
 import { Icon } from './nodes';
 import { useHoverIntent } from '../utils/useHoverIntent';
+import { HTMLLabel } from './HTMLLabel';
 
 export interface NodeProps {
   /**
@@ -179,10 +181,10 @@ export const Node: FC<NodeProps> = ({
       to: {
         nodePosition: position
           ? [
-            position.x,
-            position.y,
-            shouldHighlight ? position.z + 1 : position.z
-          ]
+              position.x,
+              position.y,
+              shouldHighlight ? position.z + 1 : position.z
+            ]
           : [0, 0, 0],
         labelPosition: [0, -(nodeSize + 7), 2],
         subLabelPosition: [0, -(nodeSize + 14), 2]
@@ -293,12 +295,8 @@ export const Node: FC<NodeProps> = ({
       label && (
         <>
           <a.group position={labelPosition as any}>
-            <Label
+            <HTMLLabel
               text={label}
-              fontUrl={labelFontUrl}
-              opacity={selectionOpacity}
-              stroke={theme.node.label.stroke}
-              active={isSelected || active || isDragging || isActive}
               color={
                 isSelected || active || isDragging || isActive
                   ? theme.node.label.activeColor
@@ -339,7 +337,6 @@ export const Node: FC<NodeProps> = ({
       subLabelPosition,
       theme.node.label.activeColor,
       theme.node.label.color,
-      theme.node.label.stroke,
       theme.node.subLabel?.activeColor,
       theme.node.subLabel?.color,
       theme.node.subLabel?.stroke

@@ -1,6 +1,6 @@
 {
   "name": "reagraph-yuce",
-  "version": "1.0.4",
+  "version": "1.0.9",
   "description": "WebGL Node-based Graph for React",
   "scripts": {
     "build": "vite build --mode library",
@@ -53,6 +53,7 @@
   "homepage": "https://github.com:yucehasan/reagraph#readme",
   "dependencies": {
     "@react-spring/three": "9.6.1",
+    "@react-three/drei": "^9.102.6",
     "@react-three/fiber": "8.13.5",
     "camera-controls": "^2.8.3",
     "classnames": "^2.5.1",
@@ -73,6 +74,7 @@
     "reakeys": "^2.0.0",
     "three": "^0.154.0",
     "three-stdlib": "^2.23.13",
+    "troika-three-text": "^0.49.0",
     "zustand": "4.3.9"
   },
   "peerDependencies": {
