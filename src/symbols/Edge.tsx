@@ -128,6 +128,9 @@ export const Edge: FC<EdgeProps> = ({
   const { target, source, label, labelVisible = false, size = 1 } = edge;
   const from = useStore(store => store.nodes.find(node => node.id === source));
   const to = useStore(store => store.nodes.find(node => node.id === target));
+  const oppositeLinkExists = edges.find(
+    edge => edge.target == from.id && edge.source == to.id
+  );
 
   const color = edge.fill || theme.edge.fill;
 
@@ -360,7 +363,7 @@ export const Edge: FC<EdgeProps> = ({
     <group>
       <Line
         curveOffset={curveOffset}
-        animated={animated}
+        animated={animated && !oppositeLinkExists}
         color={color}
         curve={curve}
         curved={curved}

@@ -1,6 +1,6 @@
 {
   "name": "reagraph-yuce",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "WebGL Node-based Graph for React",
   "scripts": {
     "build": "vite build --mode library",
