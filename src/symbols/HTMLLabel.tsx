@@ -35,7 +35,7 @@ export const HTMLLabel: FC<HTMLLabelProps> = ({ text, color }) => {
       >
         <p
           style={{
-            fontSize: '7rem',
+            fontSize: '10rem',
             overflowWrap: 'break-word',
             textAlign: 'center',
             margin: '40px',
