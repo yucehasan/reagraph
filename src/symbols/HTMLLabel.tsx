@@ -30,7 +30,8 @@ export const HTMLLabel: FC<HTMLLabelProps> = ({ text, color }) => {
           maxWidth: '2000px',
           maxHeight: '800px',
           position: 'absolute',
-          transform: 'translate(-50%, -180px)'
+          transform: 'translate(-50%, -180px)',
+          whiteSpace: 'nowrap'
         }}
       >
         <p
