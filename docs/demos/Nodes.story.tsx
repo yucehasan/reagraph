@@ -34,12 +34,10 @@ export const DragOverrides = () => {
         edges={simpleEdges}
         layoutOverrides={{
           getNodePosition: (id) => {
-            console.log('custom position', nodeRef.current.get(id))
             return nodeRef.current.get(id)?.position;
           }
         }}
         onNodeDragged={node => {
-          console.log('node dragged', node);
           nodeRef.current.set(node.id, node);
         }}
       />
