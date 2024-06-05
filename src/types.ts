@@ -238,6 +238,11 @@ export interface NodeRendererProps {
   active: boolean;
 
   /**
+   * Whether the node is selected or not.
+   */
+  selected: boolean;
+
+  /**
    * Opacity of the node. Mainly used for selection.
    */
   opacity: number;

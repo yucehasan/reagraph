@@ -18,6 +18,7 @@ import { ContextMenuEvent, InternalGraphEdge } from '../types';
 import { Html, useCursor } from 'glodrei';
 import { useHoverIntent } from '../utils/useHoverIntent';
 import { Euler, Vector3 } from 'three';
+import { ThreeEvent } from '@react-three/fiber';
 
 /**
  * Label positions relatively edge.
@@ -81,7 +82,7 @@ export interface EdgeProps {
   /**
    * A function that is called when the edge is clicked.
    */
-  onClick?: (edge: InternalGraphEdge) => void;
+  onClick?: (edge: InternalGraphEdge, event: ThreeEvent<MouseEvent>) => void;
 
   /**
    * A function that is called when the edge is right-clicked.
@@ -91,12 +92,18 @@ export interface EdgeProps {
   /**
    * A function that is called when the mouse pointer is moved over the edge.
    */
-  onPointerOver?: (edge: InternalGraphEdge) => void;
+  onPointerOver?: (
+    edge: InternalGraphEdge,
+    event: ThreeEvent<PointerEvent>
+  ) => void;
 
   /**
    * A function that is called when the mouse pointer is moved out of the edge.
    */
-  onPointerOut?: (edge: InternalGraphEdge) => void;
+  onPointerOut?: (
+    edge: InternalGraphEdge,
+    event: ThreeEvent<PointerEvent>
+  ) => void;
 }
 
 const LABEL_PLACEMENT_OFFSET = 3;
@@ -258,13 +265,13 @@ export const Edge: FC<EdgeProps> = ({
 
   const { pointerOver, pointerOut } = useHoverIntent({
     disabled,
-    onPointerOver: () => {
+    onPointerOver: (event: ThreeEvent<PointerEvent>) => {
       setActive(true);
-      onPointerOver?.(edge);
+      onPointerOver?.(edge, event);
     },
-    onPointerOut: () => {
+    onPointerOut: (event: ThreeEvent<PointerEvent>) => {
       setActive(false);
-      onPointerOut?.(edge);
+      onPointerOut?.(edge, event);
     }
   });
 
@@ -315,7 +322,7 @@ export const Edge: FC<EdgeProps> = ({
     () =>
       labelVisible &&
       label && (
-        <a.group position={labelPosition as any} rotation={labelRotation}>
+        <a.group position={labelPosition as any}>
           <Label
             text={label}
             ellipsis={15}
@@ -328,6 +335,7 @@ export const Edge: FC<EdgeProps> = ({
             }
             opacity={selectionOpacity}
             fontSize={theme.edge.label.fontSize}
+            rotation={labelRotation}
           />
         </a.group>
       ),
@@ -352,11 +360,11 @@ export const Edge: FC<EdgeProps> = ({
     () =>
       menuVisible &&
       contextMenu && (
-        <Html prepend={true} center={true}>
+        <Html prepend={true} center={true} position={midPoint}>
           {contextMenu({ data: edge, onClose: () => setMenuVisible(false) })}
         </Html>
       ),
-    [menuVisible, contextMenu, edge]
+    [menuVisible, contextMenu, midPoint, edge]
   );
 
   return (
@@ -370,9 +378,9 @@ export const Edge: FC<EdgeProps> = ({
         id={id}
         opacity={selectionOpacity}
         size={size}
-        onClick={() => {
+        onClick={event => {
           if (!disabled) {
-            onClick?.(edge);
+            onClick?.(edge, event);
           }
         }}
         onPointerOver={pointerOver}
