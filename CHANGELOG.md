@@ -1,3 +1,61 @@
+# 4.19.1 - 6/3/24
+- [fix] Fix camera pan while dragging node #248
+
+# 4.19.0 - 5/30/24
+- [feature] Add dolly camera controls #247
+
+# 4.18.1 - 5/23/24
+- [fix] Fix fit view bug after panning and zooming #246
+
+# 4.18.0 - 5/23/24
+- [feature] Add fitNodesInView function #244
+
+# 4.17.4 - 5/8/24
+- [chore] upgrade reakeys
+
+# 4.17.3 - 5/02/24
+- [feature] add new parameters to Ring #239
+ 
+# 4.17.2 - 4/30/24
+- [fix] Fix eslint setup #236
+- [fix] Fix label rotation #237
+- [fix] Fix jerky layout switching #238
+
+# 4.17.1 - 4/25/24
+- [fix] Remove active state from selection property #233
+
+# 4.17.0 - 4/23/24
+- [feature] decouple Ring from Node and move to sphere.
+- [feature] add `selected` to `NodeRendererCallback` props.
+
+# 4.16.1 - 4/15/24
+- [fix] Fix Edge context menu position #229
+
+# 4.16.0 - 4/10/24
+- [feature] Expose events for Click and Pointer API  #224
+- [fix] Node render order #225
+
+# 4.15.27 - 4/4/24
+- [fix] Fix camera view resetting on label visibility change #215
+
+# 4.15.26 - 3/26/24
+- [feature] expose `minDistance` and `maxDistance`.
+
+# 4.15.25 - 3/22/24
+- [fix] Fix graph only centering when nodes out of view #208
+- [fix] Improve label visibility for small nodes #212
+
+# 4.15.24 - 3/18/24
+- [feature] add `strokeWidth` to ring
+
+# 4.15.23 - 3/18/24
+- [fix] Fix zoom to cursor
+- [fix] Fix can't zoom while hovering a node
+- [fix] Re-center camera when nodes update
+
+# 4.15.22 - 3/13/24
+- [fix] Fix camera moving slightly on drag #202
+
 # 4.15.21 - 3/12/24
 - [fix] Fix camera reorient on deselect #201
 

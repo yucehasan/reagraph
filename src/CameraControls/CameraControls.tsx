@@ -90,6 +90,16 @@ export interface CameraControlsProps {
    * Whether the controls are enabled.
    */
   disabled?: boolean;
+
+  /**
+   * The maximum distance for the camera.
+   */
+  maxDistance?: number;
+
+  /**
+   * The minimum distance for the camera.
+   */
+  minDistance?: number;
 }
 
 export type CameraControlsRef = CameraControlsContextProps;
@@ -97,12 +107,16 @@ export type CameraControlsRef = CameraControlsContextProps;
 export const CameraControls: FC<
   CameraControlsProps & { ref?: Ref<CameraControlsRef> }
 > = forwardRef(
-  ({ mode, children, animated, disabled }, ref: Ref<CameraControlsRef>) => {
+  (
+    { mode, children, animated, disabled, minDistance, maxDistance },
+    ref: Ref<CameraControlsRef>
+  ) => {
     const cameraRef = useRef<ThreeCameraControls | null>(null);
     const camera = useThree(state => state.camera);
     const gl = useThree(state => state.gl);
     const isOrbiting = mode === 'orbit';
     const setPanning = useStore(state => state.setPanning);
+    const draggingId = useStore(state => state.draggingId);
 
     useFrame((_state, delta) => {
       if (cameraRef.current?.enabled) {
@@ -123,6 +137,20 @@ export const CameraControls: FC<
     const zoomOut = useCallback(() => {
       cameraRef.current?.zoom(-camera.zoom / 2, animated);
     }, [animated, camera.zoom]);
+
+    const dollyIn = useCallback(
+      distance => {
+        cameraRef.current?.dolly(distance, animated);
+      },
+      [animated]
+    );
+
+    const dollyOut = useCallback(
+      distance => {
+        cameraRef.current?.dolly(distance, animated);
+      },
+      [animated]
+    );
 
     const panRight = useCallback(
       event => {
@@ -218,13 +246,14 @@ export const CameraControls: FC<
 
     useEffect(() => {
       if (disabled) {
-        cameraRef.current.mouseButtons.left = 0;
-        cameraRef.current.mouseButtons.middle = 0;
-        cameraRef.current.mouseButtons.wheel = 0;
+        cameraRef.current.mouseButtons.left = ThreeCameraControls.ACTION.NONE;
+        cameraRef.current.mouseButtons.middle = ThreeCameraControls.ACTION.NONE;
+        cameraRef.current.mouseButtons.wheel = ThreeCameraControls.ACTION.NONE;
       } else {
-        cameraRef.current.mouseButtons.left = 2;
-        cameraRef.current.mouseButtons.middle = 2;
-        cameraRef.current.mouseButtons.wheel = 16;
+        cameraRef.current.mouseButtons.left = ThreeCameraControls.ACTION.TRUCK;
+        cameraRef.current.mouseButtons.middle =
+          ThreeCameraControls.ACTION.TRUCK;
+        cameraRef.current.mouseButtons.wheel = ThreeCameraControls.ACTION.DOLLY;
       }
     }, [disabled]);
 
@@ -247,12 +276,19 @@ export const CameraControls: FC<
     }, [cameraRef, setPanning]);
 
     useEffect(() => {
-      if (mode === 'rotate') {
-        cameraRef.current.mouseButtons.left = ThreeCameraControls.ACTION.ROTATE;
+      // If a node is being dragged, disable the camera controls
+      if (draggingId) {
+        cameraRef.current.mouseButtons.left = ThreeCameraControls.ACTION.NONE;
       } else {
-        cameraRef.current.mouseButtons.left = ThreeCameraControls.ACTION.TRUCK;
+        if (mode === 'rotate') {
+          cameraRef.current.mouseButtons.left =
+            ThreeCameraControls.ACTION.ROTATE;
+        } else {
+          cameraRef.current.mouseButtons.left =
+            ThreeCameraControls.ACTION.TRUCK;
+        }
       }
-    }, [mode]);
+    }, [draggingId, mode]);
 
     useHotkeys([
       {
@@ -282,6 +318,8 @@ export const CameraControls: FC<
         controls: cameraRef.current,
         zoomIn: () => zoomIn(),
         zoomOut: () => zoomOut(),
+        dollyIn: (distance = 1000) => dollyIn(distance),
+        dollyOut: (distance = -1000) => dollyOut(distance),
         panLeft: (deltaTime = 100) => panLeft({ deltaTime }),
         panRight: (deltaTime = 100) => panRight({ deltaTime }),
         panDown: (deltaTime = 100) => panDown({ deltaTime }),
@@ -301,9 +339,9 @@ export const CameraControls: FC<
           ref={cameraRef}
           args={[camera, gl.domElement]}
           smoothTime={0.1}
-          minDistance={1000}
+          minDistance={minDistance}
           dollyToCursor
-          maxDistance={50000}
+          maxDistance={maxDistance}
         />
         {children}
       </CameraControlsContext.Provider>
@@ -312,5 +350,7 @@ export const CameraControls: FC<
 );
 
 CameraControls.defaultProps = {
-  mode: 'rotate'
+  mode: 'rotate',
+  minDistance: 1000,
+  maxDistance: 50000
 };
