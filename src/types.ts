@@ -65,6 +65,10 @@ export interface GraphEdge extends GraphElementBaseAttributes {
    * Fill color for the edge.
    */
   fill?: string;
+  /**
+   * Existence of the link in current topology
+   */
+  is_deleted: boolean;
 }
 
 export interface Graph {
