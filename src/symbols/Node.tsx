@@ -379,7 +379,6 @@ export const Node: FC<NodeProps> = ({
 
   return (
     <a.group
-      renderOrder={1}
       userData={{ id, type: 'node' }}
       ref={group}
       position={nodePosition as any}
