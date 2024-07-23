@@ -34,57 +34,55 @@ function getHiddenChildren({
   const hiddenEdges: GraphEdge[] = [];
   const curHiddenNodeIds: string[] = [];
   const curHiddenEdgeIds: string[] = [];
+  const queue = [nodeId];
   for (let n in currentHiddenNodes) {
     curHiddenNodeIds.push(currentHiddenNodes[n].id);
   }
   for (let e in currentHiddenEdges) {
     curHiddenEdgeIds.push(currentHiddenEdges[e].id);
   }
+  while (queue.length > 0) {
+    const currNodeId = queue.shift();
+    const outboundEdges = edges.filter(l => l.source === currNodeId);
+    const outboundEdgeNodeIds = outboundEdges.map(l => l.target);
+    const outboundEdgeIds = outboundEdges.map(l => l.id);
 
-  const outboundEdges = edges.filter(l => l.source === nodeId);
-  const outboundEdgeNodeIds = outboundEdges.map(l => l.target);
+    hiddenEdges.push(...outboundEdges);
+    curHiddenEdgeIds.push(...outboundEdgeIds);
 
-  hiddenEdges.push(...outboundEdges);
-
-  for (const outboundEdgeNodeId of outboundEdgeNodeIds) {
-    const incomingEdges = edges.filter(
-      l => l.target === outboundEdgeNodeId && l.source !== nodeId
-    );
-    let hideNode = false;
-
-    // Check to see if any other edge is coming into this node
-    if (incomingEdges.length === 0) {
-      hideNode = true;
-    } else if (
-      incomingEdges.length > 0 &&
-      !curHiddenNodeIds.includes(outboundEdgeNodeId)
-    ) {
-      // If all inbound links are hidden, hide this node as well
-      hideNode = true;
-      const inboundNodeLinkIds = incomingEdges.map(l => l.id);
-      for (let linkId in inboundNodeLinkIds) {
-        if (!curHiddenEdgeIds.includes(linkId)) {
-          hideNode = false;
-          break;
+    for (const outboundEdgeNodeId of outboundEdgeNodeIds) {
+      const incomingEdges = edges.filter(
+        l => l.target === outboundEdgeNodeId && l.source !== currNodeId
+      );
+      let hideNode = false;
+      // Check to see if any other edge is coming into this node
+      if (incomingEdges.length === 0) {
+        hideNode = true;
+      } else if (
+        incomingEdges.length > 0 &&
+        !curHiddenNodeIds.includes(outboundEdgeNodeId)
+      ) {
+        // If all inbound links are hidden, hide this node as well
+        hideNode = true;
+        for (let link of incomingEdges) {
+          if (
+            !curHiddenEdgeIds.includes(link.id) &&
+            !curHiddenNodeIds.includes(link.source)
+          ) {
+            hideNode = false;
+            break;
+          }
         }
       }
-    }
-
-    if (hideNode) {
-      // Need to hide this node and any children of this node
-      const node = nodes.find(n => n.id === outboundEdgeNodeId);
-      if (node) {
-        hiddenNodes.push(node);
+      if (hideNode) {
+        // Need to hide this node and add its children to queue for BFS
+        const node = nodes.find(n => n.id === outboundEdgeNodeId);
+        if (node) {
+          hiddenNodes.push(node);
+          queue.push(outboundEdgeNodeId); // Add child to queue for next level
+          curHiddenNodeIds.push(node.id);
+        }
       }
-      const nested = getHiddenChildren({
-        nodeId: outboundEdgeNodeId,
-        nodes,
-        edges,
-        currentHiddenEdges: hiddenEdges,
-        currentHiddenNodes: hiddenNodes
-      });
-      hiddenEdges.push(...nested.hiddenEdges);
-      hiddenNodes.push(...nested.hiddenNodes);
     }
   }
 
@@ -140,8 +138,8 @@ export const getVisibleEntities = ({
 
   const hiddenNodeIds = curHiddenNodes.map(n => n.id);
   const hiddenEdgeIds = curHiddenEdges.map(e => e.id);
-  const visibleNodes = nodes.filter(n => !hiddenNodeIds.includes(n.id));
   const visibleEdges = edges.filter(e => !hiddenEdgeIds.includes(e.id));
+  const visibleNodes = nodes.filter(n => !hiddenNodeIds.includes(n.id));
 
   return {
     visibleNodes,
