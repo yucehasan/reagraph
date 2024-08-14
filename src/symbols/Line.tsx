@@ -110,19 +110,29 @@ export const Line: FC<LineProps> = ({
   useSpring(() => {
     const from = curve.getPoint(0);
     const to = curve.getPoint(1);
+
+    const fromObj = {
+      // Animate from center first time, then from the actual from point
+      fromVertices: !mounted.current
+        ? [center?.x || 0, center?.y || 0, center?.z || 0]
+        : [to?.x || 0, to?.y || 0, to?.z || 0],
+      toVertices: [from?.x || 0, from?.y || 0, from?.z || 0]
+    };
+
+    console.log('fromObj', fromObj);
+
+    const toObj = {
+      fromVertices: [from?.x || 0, from?.y || 0, from?.z || 0],
+      toVertices: [to?.x || 0, to?.y || 0, to?.z || 0]
+    };
+
+    console.log('toObj', toObj);
+
     return {
-      from: {
-        // Animate from center first time, then from the actual from point
-        fromVertices: !mounted.current
-          ? [center?.x, center?.y, center?.z || 0]
-          : [to?.x, to?.y, to?.z || 0],
-        toVertices: [from?.x, from?.y, from?.z || 0]
-      },
-      to: {
-        fromVertices: [from?.x, from?.y, from?.z || 0],
-        toVertices: [to?.x, to?.y, to?.z || 0]
-      },
+      from: fromObj,
+      to: toObj,
       onChange: event => {
+        console.log('event', event);
         const { fromVertices, toVertices } = event.value;
         const fromVector = new Vector3(...fromVertices);
         const toVector = new Vector3(...toVertices);
