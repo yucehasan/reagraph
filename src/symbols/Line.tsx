@@ -119,20 +119,15 @@ export const Line: FC<LineProps> = ({
       toVertices: [from?.x || 0, from?.y || 0, from?.z || 0]
     };
 
-    console.log('fromObj', fromObj);
-
     const toObj = {
       fromVertices: [from?.x || 0, from?.y || 0, from?.z || 0],
       toVertices: [to?.x || 0, to?.y || 0, to?.z || 0]
     };
 
-    console.log('toObj', toObj);
-
     return {
       from: fromObj,
       to: toObj,
       onChange: event => {
-        console.log('event', event);
         const { fromVertices, toVertices } = event.value;
         const fromVector = new Vector3(...fromVertices);
         const toVector = new Vector3(...toVertices);
